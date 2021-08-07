@@ -31,8 +31,10 @@ type settings struct {
 	overwriteFiles     *widget.RadioGroup
 	notificationRadio  *widget.RadioGroup
 
-	componentSlider     *widget.Slider
-	componentLabel      *widget.Label
+	componentSlider *widget.Slider
+	componentLabel  *widget.Label
+	verifyRadio     *widget.RadioGroup
+
 	appID               *widget.Entry
 	rendezvousURL       *widget.Entry
 	transitRelayAddress *widget.Entry
@@ -83,6 +85,11 @@ func (s *settings) onComponentsChange(value float64) {
 	s.componentLabel.SetText(strconv.Itoa(int(value)))
 }
 
+func (s *settings) onVerifyChanged(selected string) {
+	s.client.Verify = selected == "On"
+	s.app.Preferences().SetString("Verify", selected)
+}
+
 func (s *settings) onAppIDChanged(appID string) {
 	s.client.AppID = appID
 	s.app.Preferences().SetString("AppID", appID)
@@ -113,6 +120,9 @@ func (s *settings) buildUI() *container.Scroll {
 	s.componentSlider, s.componentLabel = &widget.Slider{Min: 2.0, Max: 6.0, Step: 1, OnChanged: s.onComponentsChange}, &widget.Label{}
 	s.componentSlider.SetValue(s.app.Preferences().FloatWithFallback("ComponentLength", 2))
 
+	s.verifyRadio = &widget.RadioGroup{Options: onOffOptions, Horizontal: true, Required: true, OnChanged: s.onVerifyChanged}
+	s.verifyRadio.SetSelected(s.app.Preferences().StringWithFallback("Verify", "Off"))
+
 	s.appID = &widget.Entry{PlaceHolder: wormhole.WormholeCLIAppID, OnChanged: s.onAppIDChanged}
 	s.appID.SetText(s.app.Preferences().String("AppID"))
 
@@ -133,7 +143,10 @@ func (s *settings) buildUI() *container.Scroll {
 	)
 
 	wormholeContainer := container.NewVBox(
-		container.NewGridWithColumns(2, newBoldLabel("Passphrase Length"), container.NewBorder(nil, nil, nil, s.componentLabel, s.componentSlider)),
+		container.NewGridWithColumns(2,
+			newBoldLabel("Passphrase Length"), container.NewBorder(nil, nil, nil, s.componentLabel, s.componentSlider),
+			newBoldLabel("Verify"), s.verifyRadio,
+		),
 		&widget.Accordion{Items: []*widget.AccordionItem{
 			{Title: "Advanced", Detail: container.NewGridWithColumns(2,
 				newBoldLabel("AppID"), s.appID,

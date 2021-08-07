@@ -32,6 +32,13 @@ func (c *Client) NewReceive(code string, pathname chan string) (err error) {
 		pathname <- pathToSend
 	}()
 
+	if c.Verify {
+		c.VerifierOk = c.VerifyRecv
+		defer func() {
+			c.VerifierOk = nil
+		}()
+	}
+
 	msg, err := c.Receive(context.Background(), code)
 	if err != nil {
 		fyne.LogError("Error on receiving data", err)

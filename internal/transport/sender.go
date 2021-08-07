@@ -12,11 +12,19 @@ import (
 
 // NewFileSend takes the chosen file and sends it using wormhole-william.
 func (c *Client) NewFileSend(file fyne.URIReadCloser, progress wormhole.SendOption) (string, chan wormhole.SendResult, error) {
+	if c.Verify {
+		c.VerifierOk = c.VerifySend
+	}
+
 	return c.SendFile(context.Background(), file.URI().Name(), file.(io.ReadSeeker), progress)
 }
 
 // NewDirSend takes a listable URI and sends it using wormhole-william.
 func (c *Client) NewDirSend(dir fyne.ListableURI, progress wormhole.SendOption) (string, chan wormhole.SendResult, error) {
+	if c.Verify {
+		c.VerifierOk = c.VerifySend
+	}
+
 	prefixStr, _ := filepath.Split(dir.Path())
 	prefix := len(prefixStr) // Where the prefix ends. Doing it this way is faster and works when paths don't use same separator (\ or /).
 
@@ -47,5 +55,9 @@ func (c *Client) NewDirSend(dir fyne.ListableURI, progress wormhole.SendOption) 
 
 // NewTextSend takes a text input and sends the text using wormhole-william.
 func (c *Client) NewTextSend(text string, progress wormhole.SendOption) (string, chan wormhole.SendResult, error) {
+	if c.Verify {
+		c.VerifierOk = c.VerifySend
+	}
+
 	return c.SendText(context.Background(), text, progress)
 }

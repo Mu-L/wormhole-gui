@@ -88,6 +88,7 @@ func (p *SendList) OnFileSelect(file fyne.URIReadCloser, err error) {
 
 	go func(i int) {
 		defer func() {
+			p.client.VerifierOk = nil
 			if err = file.Close(); err != nil {
 				fyne.LogError("Error on closing file", err)
 			}
@@ -126,6 +127,10 @@ func (p *SendList) OnDirSelect(dir fyne.ListableURI, err error) {
 	p.NewSendItem(dir.Name(), dir)
 
 	go func(i int) {
+		defer func() {
+			p.client.VerifierOk = nil
+		}()
+
 		code, result, err := p.client.NewDirSend(dir, p.Items[i].Progress.update)
 		if err != nil {
 			fyne.LogError("Error on sending directory", err)
@@ -151,6 +156,10 @@ func (p *SendList) SendText() {
 	p.NewSendItem("Text Snippet", storage.NewFileURI("text")) // The file URI is a hack to get the correct icon
 
 	go func(i int) {
+		defer func() {
+			p.client.VerifierOk = nil
+		}()
+
 		if text := <-p.client.ShowTextSendWindow(); text != "" {
 			code, result, err := p.client.NewTextSend(text, p.Items[i].Progress.update)
 			if err != nil {
