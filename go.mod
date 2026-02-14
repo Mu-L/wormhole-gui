@@ -8,6 +8,7 @@ require (
 	github.com/fynelabs/fyneselfupdate v0.1.2
 	github.com/fynelabs/selfupdate v0.2.1
 	github.com/klauspost/compress v1.18.2
+	github.com/rymdport/easypgo v0.2.2
 	github.com/rymdport/go-qrcode v1.2.1
 	github.com/rymdport/wormhole v0.4.0
 )

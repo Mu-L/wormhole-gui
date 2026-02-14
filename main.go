@@ -5,13 +5,13 @@ import (
 	"fyne.io/fyne/v2/app"
 
 	"github.com/Jacalz/rymdport/v3/internal/assets"
-	"github.com/Jacalz/rymdport/v3/internal/profile"
 	"github.com/Jacalz/rymdport/v3/internal/ui"
 	"github.com/Jacalz/rymdport/v3/internal/util"
+	"github.com/rymdport/easypgo"
 )
 
 func main() {
-	stop := profile.Start()
+	stop := easypgo.Generate()
 	defer stop()
 
 	removeTmpCrashDump := util.SetUpCrashLogging()
