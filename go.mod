@@ -3,18 +3,18 @@ module github.com/Jacalz/rymdport/v3
 go 1.24.0
 
 require (
-	fyne.io/fyne/v2 v2.7.1
+	fyne.io/fyne/v2 v2.7.2
 	github.com/alecthomas/assert/v2 v2.11.0
 	github.com/fynelabs/fyneselfupdate v0.1.2
 	github.com/fynelabs/selfupdate v0.2.1
-	github.com/klauspost/compress v1.18.2
+	github.com/klauspost/compress v1.18.4
 	github.com/rymdport/easypgo v0.2.2
 	github.com/rymdport/go-qrcode v1.2.1
 	github.com/rymdport/wormhole v0.4.0
 )
 
 require (
-	fyne.io/systray v1.11.1-0.20250603113521-ca66a66d8b58 // indirect
+	fyne.io/systray v1.12.0 // indirect
 	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/alecthomas/repr v0.4.0 // indirect
 	github.com/coder/websocket v1.8.14 // indirect
